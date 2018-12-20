@@ -15,6 +15,8 @@
 		03C9DD241EC1D36900E4CD62 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03C9DD221EC1D36900E4CD62 /* Main.storyboard */; };
 		03C9DD261EC1D36900E4CD62 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03C9DD251EC1D36900E4CD62 /* Assets.xcassets */; };
 		03C9DD291EC1D36900E4CD62 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03C9DD271EC1D36900E4CD62 /* LaunchScreen.storyboard */; };
+		03E9EF0521CBBB9B001AB363 /* lofi test v02.wav in Resources */ = {isa = PBXBuildFile; fileRef = 03E9EF0421CBBB9B001AB363 /* lofi test v02.wav */; };
+		03E9EF0821CBC3BD001AB363 /* click.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 03E9EF0721CBC3BD001AB363 /* click.m4a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		03C9DD251EC1D36900E4CD62 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		03C9DD281EC1D36900E4CD62 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		03C9DD2A1EC1D36900E4CD62 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		03E9EF0421CBBB9B001AB363 /* lofi test v02.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "lofi test v02.wav"; sourceTree = "<group>"; };
+		03E9EF0721CBC3BD001AB363 /* click.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = click.m4a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +64,7 @@
 		03C9DD171EC1D36900E4CD62 /* CircleShooter */ = {
 			isa = PBXGroup;
 			children = (
+				03E9EF0621CBBEB1001AB363 /* Sounds */,
 				03C9DD181EC1D36900E4CD62 /* AppDelegate.swift */,
 				03C9DD1A1EC1D36900E4CD62 /* GameScene.sks */,
 				03C9DD1C1EC1D36900E4CD62 /* Actions.sks */,
@@ -71,6 +76,15 @@
 				03C9DD2A1EC1D36900E4CD62 /* Info.plist */,
 			);
 			path = CircleShooter;
+			sourceTree = "<group>";
+		};
+		03E9EF0621CBBEB1001AB363 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				03E9EF0721CBC3BD001AB363 /* click.m4a */,
+				03E9EF0421CBBB9B001AB363 /* lofi test v02.wav */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,6 +151,8 @@
 				03C9DD241EC1D36900E4CD62 /* Main.storyboard in Resources */,
 				03C9DD1B1EC1D36900E4CD62 /* GameScene.sks in Resources */,
 				03C9DD261EC1D36900E4CD62 /* Assets.xcassets in Resources */,
+				03E9EF0821CBC3BD001AB363 /* click.m4a in Resources */,
+				03E9EF0521CBBB9B001AB363 /* lofi test v02.wav in Resources */,
 				03C9DD291EC1D36900E4CD62 /* LaunchScreen.storyboard in Resources */,
 				03C9DD1D1EC1D36900E4CD62 /* Actions.sks in Resources */,
 			);

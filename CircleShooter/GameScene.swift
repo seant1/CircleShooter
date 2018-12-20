@@ -18,7 +18,6 @@ struct PhysicsCategory {
 
 var hueWheel = 0.00
 
-
 class GameScene: SKScene {
     
     var shooter = SKSpriteNode(imageNamed: "boost_0")
@@ -59,16 +58,18 @@ class GameScene: SKScene {
         let touchHold = UILongPressGestureRecognizer(target: self, action: #selector(holdAction(gesture:)))
         view.addGestureRecognizer(touchHold)
         
-        
+        // monster repeater
         run(SKAction.repeatForever(
             SKAction.sequence([
                 SKAction.run(addMonster),
                 SKAction.wait(forDuration: 0.1),
                 ])
-            
         ))
         
-        
+        // music
+        let backgroundMusic = SKAudioNode(fileNamed: "lofi test v02.wav")
+        backgroundMusic.autoplayLooped = true
+        addChild(backgroundMusic)
     }
     
     @objc func swipeAction(gesture:UISwipeGestureRecognizer) {
@@ -116,7 +117,6 @@ class GameScene: SKScene {
             bullet.physicsBody?.contactTestBitMask = PhysicsCategory.monster
             bullet.physicsBody?.collisionBitMask = PhysicsCategory.all
             bullet.physicsBody?.usesPreciseCollisionDetection = true
-
             
             addChild(bullet)
             
@@ -131,6 +131,8 @@ class GameScene: SKScene {
             let vector = CGVector(dx: 30 * dx, dy: 30 * dy)
             
             bullet.physicsBody?.applyImpulse(vector)
+            
+
         }
     }
     
@@ -185,9 +187,9 @@ class GameScene: SKScene {
         monster.physicsBody?.contactTestBitMask = PhysicsCategory.bullet // 4
         monster.physicsBody?.collisionBitMask = PhysicsCategory.none // 5
         monster.physicsBody?.usesPreciseCollisionDetection = true
+        monster.color = SKColor(hue: random(min: 0.3, max: 0.75), saturation: 1, brightness: 1, alpha: 1)
+        monster.colorBlendFactor = 1
 
-
-        
         // Determine where to spawn the monster along the Y axis
         let actualX = random(min: monster.size.width/2, max: size.width - monster.size.width/2)
         
@@ -195,6 +197,7 @@ class GameScene: SKScene {
         // and along a random position along the Y axis as calculated above
         monster.position = CGPoint(x: actualX, y: size.height + monster.size.height/2)
         
+
         // Add the monster to the scene
         addChild(monster)
         
@@ -214,11 +217,17 @@ class GameScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
         hueWheel += 0.01
-        print(hueWheel)
+        print("hue:", hueWheel)
+        shooter.color = SKColor(hue: CGFloat(hueWheel), saturation: 1, brightness: 1, alpha: 1)
+        shooter.colorBlendFactor = 1
+
     }
     
     func bulletDidCollideWithMonster(bullet: SKSpriteNode, monster: SKSpriteNode) {
         print("Hit")
+        //shoot sfx
+        run(SKAction.playSoundFileNamed("click.m4a", waitForCompletion: false))
+
         bullet.removeFromParent()
         monster.removeFromParent()
     }
