@@ -16,20 +16,23 @@ struct PhysicsCategory {
     static let bullet    : UInt32 = 0b10      // 2
 }
 
+var hueWheel = 0.00
+
 
 class GameScene: SKScene {
     
     var shooter = SKSpriteNode(imageNamed: "boost_0")
-    
     
     override func didMove(to view: SKView) {
         
         backgroundColor = SKColor(hue: 0.6, saturation: 0.2, brightness: 0.1, alpha: 1)
         
         shooter.size = CGSize(width: 100,height: 100)
-        shooter.position = CGPoint(x: frame.width / 2, y: frame.height / 2)
+        shooter.position = CGPoint(x: frame.width / 2, y: frame.height * 0.25)
+        //shooter.color = UIColor.green
+        //shooter.colorBlendFactor = 1
         addChild(shooter)
-        
+
         let border = SKPhysicsBody(edgeLoopFrom: self.frame)
         border.friction = 0
         border.restitution = 0.5//1.75//0.5
@@ -60,10 +63,11 @@ class GameScene: SKScene {
         run(SKAction.repeatForever(
             SKAction.sequence([
                 SKAction.run(addMonster),
-                SKAction.wait(forDuration: 1.0)
+                SKAction.wait(forDuration: 0.1),
                 ])
+            
         ))
-
+        
         
     }
     
@@ -91,17 +95,16 @@ class GameScene: SKScene {
         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         print("hold")
     }
-    
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
-            
+            let bullet = SKSpriteNode(imageNamed: "boost_0")
             let moveToTouch = SKAction.moveTo(x: location.x, duration: 0.2)
             moveToTouch.timingMode = SKActionTimingMode.easeInEaseOut
             shooter.run(moveToTouch)
             //shooter.position.x = location.x
             
-            let bullet = SKSpriteNode(imageNamed: "boost_0")
             bullet.position = shooter.position
             bullet.size = CGSize(width: 30, height: 30)
             bullet.physicsBody = SKPhysicsBody(circleOfRadius: bullet.size.width * 0.4)
@@ -111,7 +114,7 @@ class GameScene: SKScene {
             bullet.physicsBody?.isDynamic = true
             bullet.physicsBody?.categoryBitMask = PhysicsCategory.bullet
             bullet.physicsBody?.contactTestBitMask = PhysicsCategory.monster
-            bullet.physicsBody?.collisionBitMask = PhysicsCategory.none
+            bullet.physicsBody?.collisionBitMask = PhysicsCategory.all
             bullet.physicsBody?.usesPreciseCollisionDetection = true
 
             
@@ -131,17 +134,23 @@ class GameScene: SKScene {
         }
     }
     
-    
+
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
-            
-            let bullet = SKSpriteNode(imageNamed: "boost_0")
+            let bullet = SKSpriteNode(imageNamed: "square")
+
             bullet.position = shooter.position
             bullet.size = CGSize(width: 20, height: 20)
             bullet.physicsBody = SKPhysicsBody(circleOfRadius: bullet.size.width * 0.4)
             bullet.physicsBody?.affectedByGravity = true
-            
+            bullet.physicsBody?.isDynamic = true
+            bullet.physicsBody?.categoryBitMask = PhysicsCategory.bullet
+            bullet.physicsBody?.contactTestBitMask = PhysicsCategory.monster
+            //bullet.physicsBody?.collisionBitMask = PhysicsCategory.none
+            bullet.physicsBody?.usesPreciseCollisionDetection = true
+            bullet.color = SKColor(hue: CGFloat(hueWheel), saturation: 1, brightness: 1, alpha: 1)
+            bullet.colorBlendFactor = 1
             addChild(bullet)
             
             var dx = CGFloat(location.x - shooter.position.x)
@@ -167,10 +176,10 @@ class GameScene: SKScene {
     
     func addMonster() {
         
-        // Create sprite
+        // Create sprite (moved)
         let monster = SKSpriteNode(imageNamed: "boost_0")
-        
-        monster.physicsBody = SKPhysicsBody(circleOfRadius: monster.size.width/2) // 1
+
+        monster.physicsBody = SKPhysicsBody(circleOfRadius: monster.size.width * 0.4) // 1
         monster.physicsBody?.isDynamic = true // 2
         monster.physicsBody?.categoryBitMask = PhysicsCategory.monster // 3
         monster.physicsBody?.contactTestBitMask = PhysicsCategory.bullet // 4
@@ -180,11 +189,11 @@ class GameScene: SKScene {
 
         
         // Determine where to spawn the monster along the Y axis
-        let actualY = random(min: monster.size.height/2, max: size.height - monster.size.height/2)
+        let actualX = random(min: monster.size.width/2, max: size.width - monster.size.width/2)
         
         // Position the monster slightly off-screen along the right edge,
         // and along a random position along the Y axis as calculated above
-        monster.position = CGPoint(x: size.width + monster.size.width/2, y: actualY)
+        monster.position = CGPoint(x: actualX, y: size.height + monster.size.height/2)
         
         // Add the monster to the scene
         addChild(monster)
@@ -193,7 +202,7 @@ class GameScene: SKScene {
         let actualDuration = random(min: CGFloat(2.0), max: CGFloat(4.0))
         
         // Create the actions
-        let actionMove = SKAction.move(to: CGPoint(x: -monster.size.width/2, y: actualY),
+        let actionMove = SKAction.move(to: CGPoint(x: actualX, y: -monster.size.width/2),
                                        duration: TimeInterval(actualDuration))
         let actionMoveDone = SKAction.removeFromParent()
         monster.run(SKAction.sequence([actionMove, actionMoveDone]))
@@ -204,10 +213,39 @@ class GameScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
+        hueWheel += 0.01
+        print(hueWheel)
+    }
+    
+    func bulletDidCollideWithMonster(bullet: SKSpriteNode, monster: SKSpriteNode) {
+        print("Hit")
+        bullet.removeFromParent()
+        monster.removeFromParent()
     }
 }
 
 
 extension GameScene: SKPhysicsContactDelegate {
-    
+    func didBegin(_ contact: SKPhysicsContact) {
+        // 1
+        var firstBody: SKPhysicsBody
+        var secondBody: SKPhysicsBody
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+            firstBody = contact.bodyA
+            secondBody = contact.bodyB
+        } else {
+            firstBody = contact.bodyB
+            secondBody = contact.bodyA
+        }
+        
+        // 2
+        if ((firstBody.categoryBitMask & PhysicsCategory.monster != 0) &&
+            (secondBody.categoryBitMask & PhysicsCategory.bullet != 0)) {
+            if let monster = firstBody.node as? SKSpriteNode,
+                let bullet = secondBody.node as? SKSpriteNode {
+                bulletDidCollideWithMonster(bullet: bullet, monster: monster)
+            }
+        }
+    }
+
 }
