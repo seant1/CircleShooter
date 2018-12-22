@@ -17,6 +17,7 @@
 		03C9DD291EC1D36900E4CD62 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03C9DD271EC1D36900E4CD62 /* LaunchScreen.storyboard */; };
 		03E9EF0521CBBB9B001AB363 /* lofi test v02.wav in Resources */ = {isa = PBXBuildFile; fileRef = 03E9EF0421CBBB9B001AB363 /* lofi test v02.wav */; };
 		03E9EF0821CBC3BD001AB363 /* click.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 03E9EF0721CBC3BD001AB363 /* click.m4a */; };
+		03E9EF0A21CBCE0C001AB363 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E9EF0921CBCE0C001AB363 /* MenuScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		03C9DD2A1EC1D36900E4CD62 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		03E9EF0421CBBB9B001AB363 /* lofi test v02.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "lofi test v02.wav"; sourceTree = "<group>"; };
 		03E9EF0721CBC3BD001AB363 /* click.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = click.m4a; sourceTree = "<group>"; };
+		03E9EF0921CBCE0C001AB363 /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 				03C9DD251EC1D36900E4CD62 /* Assets.xcassets */,
 				03C9DD271EC1D36900E4CD62 /* LaunchScreen.storyboard */,
 				03C9DD2A1EC1D36900E4CD62 /* Info.plist */,
+				03E9EF0921CBCE0C001AB363 /* MenuScene.swift */,
 			);
 			path = CircleShooter;
 			sourceTree = "<group>";
@@ -166,6 +169,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				03C9DD1F1EC1D36900E4CD62 /* GameScene.swift in Sources */,
+				03E9EF0A21CBCE0C001AB363 /* MenuScene.swift in Sources */,
 				03C9DD211EC1D36900E4CD62 /* GameViewController.swift in Sources */,
 				03C9DD191EC1D36900E4CD62 /* AppDelegate.swift in Sources */,
 			);

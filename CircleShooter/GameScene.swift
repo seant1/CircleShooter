@@ -9,17 +9,22 @@
 import SpriteKit
 import GameplayKit
 
+
 struct PhysicsCategory {
     static let none      : UInt32 = 0
     static let all       : UInt32 = UInt32.max
     static let monster   : UInt32 = 0b1       // 1
     static let bullet    : UInt32 = 0b10      // 2
+    static let bigBullet    : UInt32 = 0b11      // 2
 }
 
 var hueWheel = 0.00
+var score = 0
+
 
 class GameScene: SKScene {
     
+    let scoreLabel = SKLabelNode(fontNamed: "Chalkduster")
     var shooter = SKSpriteNode(imageNamed: "boost_0")
     
     override func didMove(to view: SKView) {
@@ -62,9 +67,25 @@ class GameScene: SKScene {
         run(SKAction.repeatForever(
             SKAction.sequence([
                 SKAction.run(addMonster),
-                SKAction.wait(forDuration: 0.1),
+                SKAction.wait(forDuration: 0.02),
                 ])
         ))
+        
+        score = 0
+        scoreLabel.text = String(score)
+        scoreLabel.fontSize = 40
+        scoreLabel.fontColor = SKColor.white
+        scoreLabel.position = CGPoint(x: size.width/2, y: size.height/2)
+        addChild(scoreLabel)
+        
+        // game end timer
+        run(SKAction.sequence([SKAction.wait(forDuration: 6),
+                               SKAction.run() { [weak self] in
+                                guard let `self` = self else { return }
+                                let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
+                                let gameOverScene = MenuScene(size: self.size, won: false)
+                                self.view?.presentScene(gameOverScene, transition: reveal)
+            }]))
         
         // music
         let backgroundMusic = SKAudioNode(fileNamed: "lofi test v02.wav")
@@ -100,25 +121,25 @@ class GameScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
-            let bullet = SKSpriteNode(imageNamed: "boost_0")
+            let bigBullet = SKSpriteNode(imageNamed: "boost_0")
             let moveToTouch = SKAction.moveTo(x: location.x, duration: 0.2)
             moveToTouch.timingMode = SKActionTimingMode.easeInEaseOut
             shooter.run(moveToTouch)
             //shooter.position.x = location.x
             
-            bullet.position = shooter.position
-            bullet.size = CGSize(width: 30, height: 30)
-            bullet.physicsBody = SKPhysicsBody(circleOfRadius: bullet.size.width * 0.4)
-            bullet.physicsBody?.affectedByGravity = true
-            //bullet.physicsBody?.friction = 0
-            bullet.physicsBody?.restitution = 1.25
-            bullet.physicsBody?.isDynamic = true
-            bullet.physicsBody?.categoryBitMask = PhysicsCategory.bullet
-            bullet.physicsBody?.contactTestBitMask = PhysicsCategory.monster
-            bullet.physicsBody?.collisionBitMask = PhysicsCategory.all
-            bullet.physicsBody?.usesPreciseCollisionDetection = true
+            bigBullet.position = shooter.position
+            bigBullet.size = CGSize(width: 30, height: 30)
+            bigBullet.physicsBody = SKPhysicsBody(circleOfRadius: bigBullet.size.width * 0.4)
+            bigBullet.physicsBody?.affectedByGravity = true
+            //bigBullet.physicsBody?.friction = 0
+            bigBullet.physicsBody?.restitution = 1.25
+            bigBullet.physicsBody?.isDynamic = true
+            bigBullet.physicsBody?.categoryBitMask = PhysicsCategory.bigBullet
+            bigBullet.physicsBody?.contactTestBitMask = PhysicsCategory.monster
+            bigBullet.physicsBody?.collisionBitMask = PhysicsCategory.all
+            bigBullet.physicsBody?.usesPreciseCollisionDetection = true
             
-            addChild(bullet)
+            addChild(bigBullet)
             
             var dx = CGFloat(location.x - shooter.position.x)
             var dy = CGFloat(location.y - shooter.position.y)
@@ -130,7 +151,7 @@ class GameScene: SKScene {
             
             let vector = CGVector(dx: 30 * dx, dy: 30 * dy)
             
-            bullet.physicsBody?.applyImpulse(vector)
+            bigBullet.physicsBody?.applyImpulse(vector)
             
 
         }
@@ -144,7 +165,7 @@ class GameScene: SKScene {
 
             bullet.position = shooter.position
             bullet.size = CGSize(width: 20, height: 20)
-            bullet.physicsBody = SKPhysicsBody(circleOfRadius: bullet.size.width * 0.4)
+            bullet.physicsBody = SKPhysicsBody(rectangleOf: bullet.size)//circleOfRadius: bullet.size.width * 0.4)
             bullet.physicsBody?.affectedByGravity = true
             bullet.physicsBody?.isDynamic = true
             bullet.physicsBody?.categoryBitMask = PhysicsCategory.bullet
@@ -211,25 +232,24 @@ class GameScene: SKScene {
         monster.run(SKAction.sequence([actionMove, actionMoveDone]))
     }
 
-    
-    
-    
-    override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered
-        hueWheel += 0.01
-        print("hue:", hueWheel)
-        shooter.color = SKColor(hue: CGFloat(hueWheel), saturation: 1, brightness: 1, alpha: 1)
-        shooter.colorBlendFactor = 1
-
-    }
-    
     func bulletDidCollideWithMonster(bullet: SKSpriteNode, monster: SKSpriteNode) {
         print("Hit")
         //shoot sfx
         run(SKAction.playSoundFileNamed("click.m4a", waitForCompletion: false))
+        score += 1
+        scoreLabel.text = String(score)
 
         bullet.removeFromParent()
         monster.removeFromParent()
+    }
+    
+    override func update(_ currentTime: TimeInterval) {
+        // Called before each frame is rendered
+        hueWheel += 0.01
+        //print("hue:", hueWheel)
+        shooter.color = SKColor(hue: CGFloat(hueWheel), saturation: 1, brightness: 1, alpha: 1)
+        shooter.colorBlendFactor = 1
+        
     }
 }
 
