@@ -83,7 +83,7 @@ class GameScene: SKScene {
                                SKAction.run() { [weak self] in
                                 guard let `self` = self else { return }
                                 let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
-                                let gameOverScene = MenuScene(size: self.size, won: false)
+                                let gameOverScene = MenuScene(size: self.size)
                                 self.view?.presentScene(gameOverScene, transition: reveal)
             }]))
         

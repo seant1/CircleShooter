@@ -155,14 +155,14 @@ class FTButtonNode: SKSpriteNode {
 class MenuScene: SKScene {
     
     
-    init(size: CGSize, won:Bool) {
+    override init(size: CGSize) {
         super.init(size: size)
         
         // 1
         //backgroundColor = SKColor.white
         
         // 2
-        let message = won ? "You Won!" : "You Winned :["
+        let message = String(score)
         
         // 3
         let label = SKLabelNode(fontNamed: "Chalkduster")
@@ -197,7 +197,7 @@ class MenuScene: SKScene {
         let buttonTextureSelected: SKTexture! = SKTexture(imageNamed: "button_start_pressed")
         let button = FTButtonNode(normalTexture: buttonTexture, selectedTexture: buttonTextureSelected, disabledTexture: buttonTexture)
         button.setButtonAction(target: self, triggerEvent: .TouchUpInside, action: #selector(MenuScene.buttonTap))
-        button.setButtonLabel(title: "", font: "Arial", fontSize: 12)
+        button.setButtonLabel(title: "Start", font: "Arial", fontSize: 12)
         button.position = CGPoint(x: self.frame.midX,y: self.frame.midY * 0.3)
         button.zPosition = 1
         button.size = CGSize(width: 300, height: 50)
@@ -207,129 +207,10 @@ class MenuScene: SKScene {
         self.addChild(button)
     }
     
-    @objc func buttonTap() {
+    func buttonTap() {
         print("Button pressed")
         let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
         let scene = GameScene(size: size)
         self.view?.presentScene(scene, transition:reveal)
     }
 }
-/*
- var button: SKNode! = nil
- 
- override func didMove(to view: SKView) {
- // Create a simple red rectangle that's 100x44
- button = SKSpriteNode(color: SKColor.red, size: CGSize(width: 100, height: 44))
- // Put it in the center of the scene
- button.position = CGPoint(x: frame.width / 2, y: frame.height * 0.25)
- 
- self.addChild(button)
- }
- 
- override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
- // Loop over all the touches in this event
- for touch: AnyObject in touches {
- // Get the location of the touch in this scene
- let location = touch.locationInNode(self)
- // Check if the location of the touch is within the button's bounds
- if button.containsPoint(location) {
- println("tapped!")
- }
- }
- }
- 
- 
- let startButtonTexture = SKTexture(imageNamed: "button_start")
- let startButtonPressedTexture = SKTexture(imageNamed: "button_start_pressed")
- //let soundButtonTexture = SKTexture(imageNamed: "speaker_on")
- //let soundButtonTextureOff = SKTexture(imageNamed: "speaker_off")
- 
- //let logoSprite = SKSpriteNode(imageNamed: "logo")
- var startButton : SKSpriteNode! = nil
- 
- override func sceneDidLoad() {
- backgroundColor = SKColor(red:0.30, green:0.81, blue:0.89, alpha:1.0)
- 
- //Set up logo - sprite initialized earlier
- //logoSprite.position = CGPoint(x: size.width / 2, y: size.height / 2 + 100)
- 
- //addChild(logoSprite)
- 
- //Set up start button
- startButton = SKSpriteNode(texture: startButtonTexture)
- startButton.position = CGPoint(x: size.width / 2, y: size.height / 2 - startButton.size.height / 2)
- 
- addChild(startButton)
- 
- }
- 
- override func touchesBegan(_ touches: Set, with event: UIEvent?) {
- if let touch = touches.first {
- if selectedButton != nil {
- handleStartButtonHover(isHovering: false)
- }
- 
- // Check which button was clicked (if any)
- if startButton.contains(touch.location(in: self)) {
- selectedButton = startButton
- handleStartButtonHover(isHovering: true)
- } else if soundButton.contains(touch.location(in: self)) {
- selectedButton = soundButton
- handleSoundButtonHover(isHovering: true)
- }
- }
- }
- 
- override func touchesMoved(_ touches: Set, with event: UIEvent?) {
- if let touch = touches.first {
- 
- // Check which button was clicked (if any)
- if selectedButton == startButton {
- handleStartButtonHover(isHovering: (startButton.contains(touch.location(in: self))))
- } else if selectedButton == soundButton {
- handleSoundButtonHover(isHovering: (soundButton.contains(touch.location(in: self))))
- }
- }
- }
- 
- override func touchesEnded(_ touches: Set, with event: UIEvent?) {
- if let touch = touches.first {
- 
- if selectedButton == startButton {
- // Start button clicked
- handleStartButtonHover(isHovering: false)
- 
- if (startButton.contains(touch.location(in: self))) {
- handleStartButtonClick()
- }
- 
- } else if selectedButton == soundButton {
- // Sound button clicked
- handleSoundButtonHover(isHovering: false)
- 
- if (soundButton.contains(touch.location(in: self))) {
- handleSoundButtonClick()
- }
- }
- }
- 
- selectedButton = nil
- }
- 
- /// Handles start button hover behavior
- func handleStartButtonHover(isHovering : Bool) {
- if isHovering {
- startButton.texture = startButtonPressedTexture
- } else {
- startButton.texture = startButtonTexture
- }
- }
- 
- /// Stubbed out start button on click method
- func handleStartButtonClick() {
- print("start clicked")
- }
- */
-
-
-
