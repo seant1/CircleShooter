@@ -87,11 +87,11 @@ class FTButtonNode: SKSpriteNode {
      You can set the title, font type and font size with this function
      */
     
-    func setButtonLabel(title: NSString, font: String, fontSize: CGFloat) {
+    func setButtonLabel(title: String, font: String, fontSize: CGFloat, fontColor: SKColor) {
         self.label.text = title as String
         self.label.fontSize = fontSize
         self.label.fontName = font
-        self.label.fontColor = SKColor.red
+        self.label.fontColor = fontColor
     }
     
     var disabledTexture: SKTexture?
@@ -168,7 +168,7 @@ class MenuScene: SKScene {
         let label = SKLabelNode(fontNamed: "Chalkduster")
         label.text = message
         label.fontSize = 40
-        label.fontColor = SKColor.black
+        label.fontColor = SKColor.blue//(hue: 0.6, saturation: 1, brightness: 0.3, alpha: 1)
         label.position = CGPoint(x: size.width/2, y: size.height/2)
         addChild(label)
         
@@ -192,16 +192,16 @@ class MenuScene: SKScene {
     
     override func didMove(to view: SKView)
     {
-        backgroundColor = SKColor.white
+        backgroundColor = SKColor(hue: 0.6, saturation: 0.4, brightness: 1, alpha: 1)
         let buttonTexture: SKTexture! = SKTexture(imageNamed: "button_start")
         let buttonTextureSelected: SKTexture! = SKTexture(imageNamed: "button_start_pressed")
         let button = FTButtonNode(normalTexture: buttonTexture, selectedTexture: buttonTextureSelected, disabledTexture: buttonTexture)
         button.setButtonAction(target: self, triggerEvent: .TouchUpInside, action: #selector(MenuScene.buttonTap))
-        button.setButtonLabel(title: "Start", font: "Arial", fontSize: 12)
+        button.setButtonLabel(title: "Start", font: "Chalkduster", fontSize: 20, fontColor: SKColor.brown)
         button.position = CGPoint(x: self.frame.midX,y: self.frame.midY * 0.3)
         button.zPosition = 1
         button.size = CGSize(width: 300, height: 50)
-        button.color = SKColor.red
+        //button.color = SKColor.blue
         button.colorBlendFactor = 1
         button.name = "Button"
         self.addChild(button)

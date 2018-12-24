@@ -79,7 +79,7 @@ class GameScene: SKScene {
         addChild(scoreLabel)
         
         // game end timer
-        run(SKAction.sequence([SKAction.wait(forDuration: 6),
+        run(SKAction.sequence([SKAction.wait(forDuration: 20),
                                SKAction.run() { [weak self] in
                                 guard let `self` = self else { return }
                                 let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
